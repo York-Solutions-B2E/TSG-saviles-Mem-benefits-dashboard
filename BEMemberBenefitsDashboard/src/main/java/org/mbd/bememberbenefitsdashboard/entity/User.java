@@ -12,8 +12,8 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -29,4 +29,7 @@ public class User {
 
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
+    public User(String authProvider, String authSub, String email, String firstName, String lastName) {
+    }
 }

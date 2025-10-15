@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "enrollments")
+@Table(
+        name = "enrollments",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "plan_id"})
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +21,7 @@ public class Enrollment {
     @GeneratedValue
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 

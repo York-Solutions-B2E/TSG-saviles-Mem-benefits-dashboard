@@ -13,9 +13,9 @@ import java.util.UUID;
 public class Plan {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private UUID id;
-
+    @Column(unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)

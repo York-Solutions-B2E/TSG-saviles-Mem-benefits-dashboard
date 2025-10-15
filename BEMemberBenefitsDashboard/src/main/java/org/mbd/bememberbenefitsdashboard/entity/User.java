@@ -30,6 +30,12 @@ public class User {
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
 
-    public User(String authProvider, String authSub, String email, String firstName, String lastName) {
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Member member;
+
+    public User(String authProvider, String authSub, String email) {
+        this.authProvider = authProvider;
+        this.authSub = authSub;
+        this.email = email;
     }
 }

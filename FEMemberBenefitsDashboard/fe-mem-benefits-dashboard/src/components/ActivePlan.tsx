@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 
 function ActivePlan() {
   const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/api/dashboard", {
+        const response = await fetch("http://localhost:8080/api/dashboard/enrollment", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -19,15 +18,11 @@ function ActivePlan() {
         setData(json);
       } catch (error) {
         console.error("Error fetching active plan:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchData();
   }, []);
-
-  if (loading) return null;
 
   if (!data || !data.plan) {
     return <p>No active enrollment found.</p>;

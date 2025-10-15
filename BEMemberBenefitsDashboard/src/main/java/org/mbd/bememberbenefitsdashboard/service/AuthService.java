@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
     private final UserRepository userRepository;
+    private final DummyDataService dummyDataService;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, DummyDataService dummyDataService) {
         this.userRepository = userRepository;
+        this.dummyDataService = dummyDataService;
     }
 
 
@@ -45,9 +47,11 @@ public class AuthService {
             // Link member to user
             user.setMember(member);
 
+            dummyDataService.populateDummyData(member);
             // Save user again to cascade member
             userRepository.save(user);
         }
+
     }
 
 }

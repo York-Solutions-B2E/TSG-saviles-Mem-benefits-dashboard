@@ -7,7 +7,7 @@ function InAppHeader() {
   const userName = localStorage.getItem("userName") || "User";
 
   const handleLogout = () => {
-    localStorage.removeItem("appJwt");
+    localStorage.removeItem("token");
     localStorage.removeItem("userName"); // optional, clean up stored name
     navigate("/login");
   };

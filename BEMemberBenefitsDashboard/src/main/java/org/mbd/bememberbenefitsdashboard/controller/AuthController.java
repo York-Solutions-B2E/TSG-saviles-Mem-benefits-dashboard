@@ -1,9 +1,9 @@
 package org.mbd.bememberbenefitsdashboard.controller;
 import lombok.*;
-import org.mbd.bememberbenefitsdashboard.dto.LoginRequest;
 import org.mbd.bememberbenefitsdashboard.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @Getter
@@ -18,10 +18,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> loginWithGoogle(@RequestBody LoginRequest request) {
-        // The request contains the Google ID token
-        return ResponseEntity.ok(authService.handleLogin(request.getIdToken()));
+    @GetMapping
+    public ResponseEntity<Void> validateLogin(@AuthenticationPrincipal Jwt jwt) {
+        authService.findOrCreateMember(jwt);
+        return ResponseEntity.ok().build();
     }
 
 

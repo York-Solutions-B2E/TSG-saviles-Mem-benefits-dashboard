@@ -33,9 +33,5 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Member member;
 
-    public User(String authProvider, String authSub, String email) {
-        this.authProvider = authProvider;
-        this.authSub = authSub;
-        this.email = email;
-    }
+
 }

@@ -8,7 +8,7 @@ import Welcome from "./pages/Welcome";
 
 function AppContent() {
   const location = useLocation();
-  const isLoggedIn = !!localStorage.getItem("appJwt"); 
+  const isLoggedIn = !!localStorage.getItem("token"); 
 
   const showNav = !isLoggedIn && (location.pathname === "/" || location.pathname === "/login");
 

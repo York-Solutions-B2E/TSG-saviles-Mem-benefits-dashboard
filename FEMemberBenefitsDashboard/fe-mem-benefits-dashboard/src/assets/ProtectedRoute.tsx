@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 // This component wraps protected routes
 const ProtectedRoute: React.FC = () => {
   // Check for JWT in localStorage
-  const token = localStorage.getItem("appJwt");
+  const token = localStorage.getItem("token");
 
   // If no token, redirect to /login
   if (!token) {

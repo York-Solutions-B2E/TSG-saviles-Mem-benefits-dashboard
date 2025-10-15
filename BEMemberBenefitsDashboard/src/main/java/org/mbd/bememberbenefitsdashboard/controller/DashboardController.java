@@ -2,10 +2,13 @@ package org.mbd.bememberbenefitsdashboard.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.mbd.bememberbenefitsdashboard.dto.EnrollmentDTO;
 import org.mbd.bememberbenefitsdashboard.entity.Enrollment;
 import org.mbd.bememberbenefitsdashboard.service.DashboardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +27,8 @@ public class DashboardController {
     }
 
     @GetMapping
-    public ResponseEntity<Enrollment> getMemberEnrollment() {
-        Enrollment enrollment = dashboardService.getCurrentMemberEnrollment();
-        return ResponseEntity.ok(enrollment);
+    public EnrollmentDTO getMemberEnrollment(@AuthenticationPrincipal Jwt jwt) {
+        return dashboardService.getCurrentMemberEnrollment(jwt);
     }
 
 

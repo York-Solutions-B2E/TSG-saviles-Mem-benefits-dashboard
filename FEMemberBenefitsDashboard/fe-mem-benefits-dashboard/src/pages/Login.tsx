@@ -9,7 +9,6 @@ function Login() {
   const handleGoogleSuccess = async (credentialResponse: any) => {
     const token = credentialResponse.credential;
 
-    console.log("Google ID token received:", credentialResponse.credential);
     const decoded: any = jwtDecode(token);
     if (!token) {
       setError("No credential received from Google.");

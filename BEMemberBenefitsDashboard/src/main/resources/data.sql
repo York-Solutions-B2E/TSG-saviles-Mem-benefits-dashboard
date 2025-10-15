@@ -5,6 +5,6 @@ VALUES
     (gen_random_uuid(), 'Bronze EPO', 'EPO', 'HealthFirst Network', 2025)
     ON CONFLICT (name) DO NOTHING;
 
---INSERT INTO enrollments(id, member_id, plan_id, coverage_start, coverage_end, active)
---VALUES(gen_random_uuid(),'fa97d609-cd19-4463-be77-5b3c75fe3056', 'ccb634f4-ed72-42d2-b16f-199141292fc2', '2025-01-01', '2025-12-31', true )
---ON CONFLICT (member_id, plan_id) DO NOTHING;
+INSERT INTO enrollments(id, member_id, plan_id, coverage_start, coverage_end, active)
+VALUES(gen_random_uuid(),'f3fac9ff-a1d6-4ee0-be35-5eac1deab15e', '677715fd-f700-4372-9431-2b7ad225e52a', '2025-01-01', '2025-12-31', true )
+ON CONFLICT (member_id, plan_id) DO NOTHING;

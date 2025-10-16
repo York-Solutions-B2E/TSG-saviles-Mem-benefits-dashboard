@@ -38,9 +38,9 @@ public class DashboardController {
         return dashboardService.getMemberAccumulator(jwt);
     }
 
-    @GetMapping("/claimsssssssss")
+    @GetMapping("/claims")
     public List<ClaimDTO> getMemberClaims(@AuthenticationPrincipal Jwt jwt) {
-        return null;
+        return dashboardService.getMemberClaims(jwt);
     }
 
 }

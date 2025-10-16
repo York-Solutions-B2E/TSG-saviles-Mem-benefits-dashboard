@@ -1,10 +1,13 @@
 package org.mbd.bememberbenefitsdashboard.service;
 
 import org.mbd.bememberbenefitsdashboard.dto.AccumulatorDTO;
+import org.mbd.bememberbenefitsdashboard.dto.ClaimDTO;
 import org.mbd.bememberbenefitsdashboard.dto.EnrollmentDTO;
 import org.mbd.bememberbenefitsdashboard.entity.Accumulator;
+import org.mbd.bememberbenefitsdashboard.entity.Claim;
 import org.mbd.bememberbenefitsdashboard.entity.Enrollment;
 import org.mbd.bememberbenefitsdashboard.entity.Member;
+import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
 import org.mbd.bememberbenefitsdashboard.repository.EnrollmentRepository;
 import org.mbd.bememberbenefitsdashboard.repository.MemberRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -18,10 +21,12 @@ import java.util.List;
 public class DashboardService {
     private final EnrollmentRepository enrollmentRepository;
     private final MemberRepository memberRepository;
+    private final ClaimRepository claimRepository;
 
-    public DashboardService(EnrollmentRepository enrollmentRepository, MemberRepository memberRepository) {
+    public DashboardService(EnrollmentRepository enrollmentRepository, MemberRepository memberRepository, ClaimRepository claimRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.memberRepository = memberRepository;
+        this.claimRepository = claimRepository;
     }
 
     public EnrollmentDTO getCurrentMemberEnrollment(Jwt jwt) {
@@ -55,6 +60,27 @@ public class DashboardService {
             accumulatorDTOs.add(dto);
         }
         return accumulatorDTOs;
+    }
+
+    public List<ClaimDTO> getMemberClaims(Jwt jwt) {
+        String email = jwt.getClaim("email");
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        List<Claim> claims = claimRepository.findTop5ByMemberOrderByReceivedDateDesc(member);
+        List<ClaimDTO> claimDTOs = new ArrayList<>();
+        for (Claim claim : claims) {
+            ClaimDTO dto = new ClaimDTO();
+            dto.setClaimNumber(claim.getClaimNumber());
+            dto.setStatus(claim.getStatus());
+            dto.setTotalAllowed(claim.getTotalAllowed());
+            dto.setTotalBilled(claim.getTotalBilled());
+            dto.setTotalPlanPaid(claim.getTotalPlanPaid());
+            dto.setTotalMemberResponsibility(claim.getTotalMemberResponsibility());
+            claimDTOs.add(dto);
+        }
+
+        return claimDTOs;
     }
 
 }

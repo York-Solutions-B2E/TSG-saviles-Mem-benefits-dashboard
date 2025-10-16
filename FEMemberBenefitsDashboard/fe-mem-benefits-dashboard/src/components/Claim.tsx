@@ -24,6 +24,25 @@ function Claim() {
         fetchData();
     },[]);
 
+    let claimsList = [];
+
+    for (let i = 0;i<data.length; i++) {
+        const claim = data[i]
+
+        const element = (
+            <div key={i} style={{ border: "1px solid black", margin: "8px", padding: "8px" }}>
+                <p><strong>Claim #:</strong> {claim.claimNumber}</p>
+                <p><strong>Status:</strong> {claim.status}</p>
+                <p><strong>Billed:</strong> ${claim.totalBilled}</p>
+                <p><strong>Allowed:</strong> ${claim.totalAllowed}</p>
+                <p><strong>Plan Paid:</strong> ${claim.totalPlanPaid}</p>
+                <p><strong>Member Responsible:</strong> ${claim.totalMemberResponsibility}</p>
+            </div>
+        )
+        claimsList.push(element)
+    }
+
+
     return (
     <div
       style={{
@@ -34,7 +53,9 @@ function Claim() {
       }}
     >
       <h2>Claims:</h2>
-
+        <div style={{ marginBottom: "1rem" }}>
+        <strong>Deductable:</strong> {claimsList}<br />
+      </div>
     </div>
     )
 }

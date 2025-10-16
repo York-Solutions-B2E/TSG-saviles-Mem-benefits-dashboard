@@ -6,6 +6,7 @@ import ProtectedRoute from "./assets/ProtectedRoute";
 import PublicRoute from "./assets/PublicRoute";
 import Welcome from "./pages/Welcome";
 import ClaimDetail from "./pages/ClaimDetail";
+import ClaimsList from "./pages/ClaimsList";
 
 function AppContent() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function AppContent() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/claims/:claimId" element={<ClaimDetail />} />
+          <Route path="/claimslist" element={<ClaimsList />} />
         </Route>
       </Routes>
     </>

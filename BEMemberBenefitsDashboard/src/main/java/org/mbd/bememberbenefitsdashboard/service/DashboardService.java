@@ -71,6 +71,8 @@ public class DashboardService {
         List<ClaimDTO> claimDTOs = new ArrayList<>();
         for (Claim claim : claims) {
             ClaimDTO dto = new ClaimDTO();
+            dto.setId(claim.getId());
+            dto.setClaimNumber(claim.getClaimNumber());
             dto.setClaimNumber(claim.getClaimNumber());
             dto.setStatus(claim.getStatus());
             dto.setTotalMemberResponsibility(claim.getTotalMemberResponsibility());

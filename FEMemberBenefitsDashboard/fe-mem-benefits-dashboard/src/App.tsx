@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./assets/ProtectedRoute";
 import PublicRoute from "./assets/PublicRoute";
 import Welcome from "./pages/Welcome";
+import ClaimDetail from "./pages/ClaimDetail";
 
 function AppContent() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function AppContent() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/claims/:claimId" element={<ClaimDetail />} />
         </Route>
       </Routes>
     </>

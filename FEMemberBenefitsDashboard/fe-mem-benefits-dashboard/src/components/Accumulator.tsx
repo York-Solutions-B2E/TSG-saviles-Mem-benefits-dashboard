@@ -39,7 +39,7 @@ function Accumulator() {
     // create a simple element for each accumulator
     const element = (
       <div key={i}>
-        <p>{type}: ${acc.usedAmount.toFixed(2)}/${acc.limitAmount.toFixed(2)}</p>
+        <p><strong>{type}:</strong> ${acc.usedAmount.toFixed(2)}/${acc.limitAmount.toFixed(2)}</p>
         <hr />
       </div>
     );
@@ -60,7 +60,7 @@ function Accumulator() {
     >
       <h2>Accumulator:</h2>
       <div style={{ marginBottom: "1rem" }}>
-        <strong>Deductable:</strong> {accumulatorItems}<br />
+       {accumulatorItems}<br />
       </div>
     </div>
     )

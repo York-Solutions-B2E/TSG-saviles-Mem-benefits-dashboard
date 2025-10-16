@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function Claim() {
-
+    const navigate = useNavigate();
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -36,7 +36,9 @@ function Claim() {
 
         const element = (
             <div key={i} style={{ border: "1px solid black", margin: "8px", padding: "8px" }}>
-                <p><strong>Claim #:</strong> {claim.claimNumber}</p>
+                <p style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+                    onClick={() => navigate(`/claims/${claim.id}`)}
+                >  <strong>Claim #:</strong> {claim.claimNumber}</p>
                 <p><strong>Status:</strong> {claim.status}</p>
                 <p><strong>Member Responsible:</strong> ${claim.totalMemberResponsibility}</p>
             </div>
@@ -56,7 +58,7 @@ function Claim() {
     >
       <h2>Claims:</h2>
         <div style={{ marginBottom: "1rem" }}>
-        <strong>Deductable:</strong> {claimsList}<br />
+        {claimsList}<br />
       </div>
     </div>
     )

@@ -22,7 +22,9 @@ public class DummyDataService {
     private final AccumulatorRepository accumulatorRepository;
     private final ProviderRepository providerRepository;
     private final ClaimRepository claimRepository;
+    private final ClaimLineRepository claimLineRepository;
     private final MemberRepository memberRepository;
+
 
     @Transactional
     public void populateDummyData(Member member) {
@@ -234,6 +236,85 @@ public class DummyDataService {
         claimRepository.saveAll(Arrays.asList(
                 claim1, claim2, claim3, claim4, claim5, claim6, claim7, claim8
         ));
+
+        // ✅ 5. Create ClaimLines for each claim
+        ClaimLine line1a = new ClaimLine(null, claim1, 1, "99213", "Office visit, established patient",
+                BigDecimal.valueOf(200.00), BigDecimal.valueOf(180.00),
+                BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(150.00),
+                BigDecimal.valueOf(30.00));
+
+        ClaimLine line1b = new ClaimLine(null, claim1, 2, "87070", "Lab culture, bacterial",
+                BigDecimal.valueOf(300.00), BigDecimal.valueOf(270.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(20.00), BigDecimal.valueOf(250.00),
+                BigDecimal.valueOf(20.00));
+
+        ClaimLine line2a = new ClaimLine(null, claim2, 1, "41899", "Dental surgery, unspecified procedure",
+                BigDecimal.valueOf(600.00), BigDecimal.valueOf(500.00),
+                BigDecimal.valueOf(50.00), BigDecimal.valueOf(20.00),
+                BigDecimal.valueOf(30.00), BigDecimal.valueOf(400.00),
+                BigDecimal.valueOf(100.00));
+
+        ClaimLine line2b = new ClaimLine(null, claim2, 2, "70320", "Dental X-ray, complete series",
+                BigDecimal.valueOf(200.00), BigDecimal.valueOf(180.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(10.00),
+                BigDecimal.valueOf(20.00), BigDecimal.valueOf(150.00),
+                BigDecimal.valueOf(30.00));
+
+        ClaimLine line3a = new ClaimLine(null, claim3, 1, "93000", "Electrocardiogram complete",
+                BigDecimal.valueOf(150.00), BigDecimal.valueOf(130.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(10.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(120.00),
+                BigDecimal.valueOf(10.00));
+
+        ClaimLine line4a = new ClaimLine(null, claim4, 1, "29888", "Knee arthroscopy, ACL reconstruction",
+                BigDecimal.valueOf(800.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(800.00));
+
+        ClaimLine line5a = new ClaimLine(null, claim5, 1, "99212", "Office visit, brief",
+                BigDecimal.valueOf(250.00), BigDecimal.valueOf(200.00),
+                BigDecimal.valueOf(20.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(180.00),
+                BigDecimal.valueOf(20.00));
+
+        ClaimLine line6a = new ClaimLine(null, claim6, 1, "93306", "Echocardiogram complete",
+                BigDecimal.valueOf(600.00), BigDecimal.valueOf(550.00),
+                BigDecimal.valueOf(50.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(550.00));
+
+        ClaimLine line7a = new ClaimLine(null, claim7, 1, "99214", "Office visit, established, moderate",
+                BigDecimal.valueOf(400.00), BigDecimal.valueOf(370.00),
+                BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(340.00),
+                BigDecimal.valueOf(30.00));
+
+        ClaimLine line7b = new ClaimLine(null, claim7, 2, "80050", "General health panel",
+                BigDecimal.valueOf(500.00), BigDecimal.valueOf(480.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00),
+                BigDecimal.valueOf(0.00), BigDecimal.valueOf(460.00),
+                BigDecimal.valueOf(20.00));
+
+        ClaimLine line8a = new ClaimLine(null, claim8, 1, "73721", "MRI lower extremity joint",
+                BigDecimal.valueOf(1500.00), BigDecimal.valueOf(1200.00),
+                BigDecimal.valueOf(100.00), BigDecimal.valueOf(50.00),
+                BigDecimal.valueOf(100.00), BigDecimal.valueOf(950.00),
+                BigDecimal.valueOf(250.00));
+
+        claimLineRepository.saveAll(Arrays.asList(
+                line1a, line1b,
+                line2a, line2b,
+                line3a,
+                line4a,
+                line5a,
+                line6a,
+                line7a, line7b,
+                line8a
+        ));
+
 
     }
 }

@@ -7,16 +7,12 @@ import org.mbd.bememberbenefitsdashboard.entity.Enrollment;
 import org.mbd.bememberbenefitsdashboard.entity.Member;
 import org.mbd.bememberbenefitsdashboard.repository.EnrollmentRepository;
 import org.mbd.bememberbenefitsdashboard.repository.MemberRepository;
-import org.mbd.bememberbenefitsdashboard.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class DashboardService {
@@ -54,8 +50,12 @@ public class DashboardService {
         for (Accumulator acc : accumulators) {
             AccumulatorDTO dto = new AccumulatorDTO();
             dto.setAccumulatorType(acc.getType());
+            System.out.println(dto.getAccumulatorType());
             dto.setUsedAmount(acc.getUsedAmount());
+            System.out.println(dto.getUsedAmount());
             dto.setLimitAmount(acc.getLimitAmount());
+            System.out.println(dto.getLimitAmount());
+            accumulatorDTOs.add(dto);
         }
         return accumulatorDTOs;
     }

@@ -20,7 +20,7 @@ function InAppHeader() {
       padding: "10px 20px", 
       borderBottom: "1px solid #ccc" 
     }}>
-      <h1>Member Benefits Dashboard</h1>
+      <h1>Member Benefits</h1>
       <div>
         <span style={{ marginRight: "20px" }}>Welcome, {userName}!</span>
         <button onClick={handleLogout}>Logout</button>

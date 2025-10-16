@@ -50,11 +50,8 @@ public class DashboardService {
         for (Accumulator acc : accumulators) {
             AccumulatorDTO dto = new AccumulatorDTO();
             dto.setAccumulatorType(acc.getType());
-            System.out.println(dto.getAccumulatorType());
             dto.setUsedAmount(acc.getUsedAmount());
-            System.out.println(dto.getUsedAmount());
             dto.setLimitAmount(acc.getLimitAmount());
-            System.out.println(dto.getLimitAmount());
             accumulatorDTOs.add(dto);
         }
         return accumulatorDTOs;

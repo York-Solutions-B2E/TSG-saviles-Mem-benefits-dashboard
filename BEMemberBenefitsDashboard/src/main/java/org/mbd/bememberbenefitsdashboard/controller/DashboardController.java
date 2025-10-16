@@ -3,6 +3,7 @@ package org.mbd.bememberbenefitsdashboard.controller;
 import lombok.Getter;
 import lombok.Setter;
 import org.mbd.bememberbenefitsdashboard.dto.AccumulatorDTO;
+import org.mbd.bememberbenefitsdashboard.dto.ClaimDTO;
 import org.mbd.bememberbenefitsdashboard.dto.EnrollmentDTO;
 import org.mbd.bememberbenefitsdashboard.entity.Enrollment;
 import org.mbd.bememberbenefitsdashboard.service.DashboardService;
@@ -35,6 +36,11 @@ public class DashboardController {
     @GetMapping("/accumulator")
     public List<AccumulatorDTO> getMemberAccumulator(@AuthenticationPrincipal Jwt jwt) {
         return dashboardService.getMemberAccumulator(jwt);
+    }
+
+    @GetMapping("/claimsssssssss")
+    public List<ClaimDTO> getMemberClaims(@AuthenticationPrincipal Jwt jwt) {
+        return null;
     }
 
 }

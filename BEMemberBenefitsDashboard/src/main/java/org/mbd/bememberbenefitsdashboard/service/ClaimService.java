@@ -1,12 +1,18 @@
 package org.mbd.bememberbenefitsdashboard.service;
 
+import org.mbd.bememberbenefitsdashboard.dto.ClaimDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimDetailDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimLineDTO;
 import org.mbd.bememberbenefitsdashboard.entity.Claim;
 import org.mbd.bememberbenefitsdashboard.entity.ClaimLine;
+import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,4 +71,44 @@ public class ClaimService {
         }
         return lineDTOs;
     }
+
+    public Page<ClaimDetailDTO> getAllClaimsWithFilters(
+            List<ClaimStatus> status,
+            LocalDate startDate,
+            LocalDate endDate,
+            String provider,
+            String claimNumber,
+            Pageable pageable) {
+
+        // Get a page of Claims (unfiltered)
+        Page<Claim> page = claimRepository.findAll(pageable);
+
+        // Apply in-memory filters
+        List<Claim> filtered = page.getContent().stream()
+                .filter(c -> status == null || status.contains(c.getStatus()))
+                .filter(c -> startDate == null || !c.getServiceStartDate().isBefore(startDate))
+                .filter(c -> endDate == null || !c.getServiceEndDate().isAfter(endDate))
+                .filter(c -> provider == null ||
+                        c.getProvider().getName().toLowerCase().contains(provider.toLowerCase()))
+                .filter(c -> claimNumber == null ||
+                        c.getClaimNumber().equalsIgnoreCase(claimNumber))
+                .toList();
+
+        List<ClaimDetailDTO> dtoList = new ArrayList<>();
+
+        for (Claim c : filtered) {
+            ClaimDetailDTO dto = new ClaimDetailDTO();
+            dto.setId(c.getId());
+            dto.setClaimNumber(c.getClaimNumber());
+            dto.setStatus(c.getStatus());
+            dto.setTotalMemberResponsibility(c.getTotalMemberResponsibility());
+            dto.setProviderName(c.getProvider().getName());
+            dto.setServiceStartDate(c.getServiceStartDate());
+            dto.setServiceEndDate(c.getServiceEndDate());
+            dtoList.add(dto);
+        }
+
+        return new PageImpl<>(dtoList, pageable, filtered.size());
+    }
+
 }

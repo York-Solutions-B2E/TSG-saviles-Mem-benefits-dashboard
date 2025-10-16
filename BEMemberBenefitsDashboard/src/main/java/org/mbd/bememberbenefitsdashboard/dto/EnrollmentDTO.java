@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.mbd.bememberbenefitsdashboard.entity.Plan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 

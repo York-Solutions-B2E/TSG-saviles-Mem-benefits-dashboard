@@ -73,9 +73,6 @@ public class DashboardService {
             ClaimDTO dto = new ClaimDTO();
             dto.setClaimNumber(claim.getClaimNumber());
             dto.setStatus(claim.getStatus());
-            dto.setTotalAllowed(claim.getTotalAllowed());
-            dto.setTotalBilled(claim.getTotalBilled());
-            dto.setTotalPlanPaid(claim.getTotalPlanPaid());
             dto.setTotalMemberResponsibility(claim.getTotalMemberResponsibility());
             claimDTOs.add(dto);
         }

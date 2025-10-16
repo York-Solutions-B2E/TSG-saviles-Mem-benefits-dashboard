@@ -13,9 +13,6 @@ public class ClaimDTO {
 
     private String claimNumber;
     private ClaimStatus status;
-    private BigDecimal totalBilled;
-    private BigDecimal totalAllowed;
-    private BigDecimal totalPlanPaid;
     private BigDecimal totalMemberResponsibility;
 
 }

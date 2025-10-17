@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByAuthSub(String authSub); //Optional because user might not exist
+    User getByAuthSub(String authSub); //Used after we know user exists
 
-    User getUserById(UUID id);
 }

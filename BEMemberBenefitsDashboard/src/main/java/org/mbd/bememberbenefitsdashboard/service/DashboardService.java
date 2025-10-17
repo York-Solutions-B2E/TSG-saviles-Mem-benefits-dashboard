@@ -3,13 +3,11 @@ package org.mbd.bememberbenefitsdashboard.service;
 import org.mbd.bememberbenefitsdashboard.dto.AccumulatorDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimDTO;
 import org.mbd.bememberbenefitsdashboard.dto.EnrollmentDTO;
-import org.mbd.bememberbenefitsdashboard.entity.Accumulator;
-import org.mbd.bememberbenefitsdashboard.entity.Claim;
-import org.mbd.bememberbenefitsdashboard.entity.Enrollment;
-import org.mbd.bememberbenefitsdashboard.entity.Member;
+import org.mbd.bememberbenefitsdashboard.entity.*;
 import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
 import org.mbd.bememberbenefitsdashboard.repository.EnrollmentRepository;
 import org.mbd.bememberbenefitsdashboard.repository.MemberRepository;
+import org.mbd.bememberbenefitsdashboard.repository.UserRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -20,31 +18,33 @@ public class DashboardService {
     private final EnrollmentRepository enrollmentRepository;
     private final MemberRepository memberRepository;
     private final ClaimRepository claimRepository;
+    private final UserRepository userRepository;
 
-    public DashboardService(EnrollmentRepository enrollmentRepository, MemberRepository memberRepository, ClaimRepository claimRepository) {
+    public DashboardService(EnrollmentRepository enrollmentRepository, MemberRepository memberRepository, ClaimRepository claimRepository, UserRepository userRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.memberRepository = memberRepository;
         this.claimRepository = claimRepository;
+        this.userRepository = userRepository;
     }
 
     public EnrollmentDTO getCurrentMemberEnrollment(Jwt jwt) {
+        String sub = jwt.getClaim("sub");
+        User user = userRepository.getByAuthSub(sub);
+        Member member = user.getMember();
 
-        String email = jwt.getClaim("email");
-        return memberRepository.findByEmail(email)
-                .flatMap(member -> enrollmentRepository.findByMemberAndActiveTrue(member))
-                .map(enrollment -> new EnrollmentDTO(
+        return enrollmentRepository.findByMemberAndActiveTrue(member)
+                .map(enrollment -> new EnrollmentDTO( //this map is a method on the Optional class. "if enrollment exists, then create EnrollmentDTO"
                         enrollment.getPlan(),
                         enrollment.getCoverageStart(),
                         enrollment.getCoverageEnd()
                 ))
-                .orElseGet(() -> new EnrollmentDTO(null, null, null)); // empty DTO if none
+                .orElseThrow(() -> new RuntimeException("No active enrollment found for member"));
     }
 
     public List<AccumulatorDTO> getMemberAccumulator(Jwt jwt) {
-        String email = jwt.getClaim("email");
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
-
+        String sub = jwt.getClaim("sub");
+        User user = userRepository.getByAuthSub(sub);
+        Member member = user.getMember();
         Enrollment enrollment = enrollmentRepository.findByMemberAndActiveTrue(member)
                 .orElseThrow(() -> new RuntimeException("No active enrollment found for member"));
 

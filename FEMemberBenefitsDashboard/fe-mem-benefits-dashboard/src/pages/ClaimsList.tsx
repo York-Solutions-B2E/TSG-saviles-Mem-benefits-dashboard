@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import InAppHeader from "../components/InAppHeader";
 import StatusFilter from "../assets/StatusFilter";
+import DateFilter from "../assets/DateFilter";
 
 function ClaimsList() {
   const [claims, setClaims] = useState<any>(null);
@@ -9,9 +10,11 @@ function ClaimsList() {
   const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
-  // Get the statuses from StatusFilter component
+  // Get filters from child components
   const [selectedStatuses, setSelectedStatuses] = useState<boolean[]>([false, false, false, false, false]);
   const statusNames = ["SUBMITTED", "IN_REVIEW", "PROCESSED", "PAID", "DENIED"];
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   // Fetch claims whenever selectedStatuses OR page changes
   useEffect(() => {
@@ -27,6 +30,14 @@ function ClaimsList() {
           }
         });
 
+        // Add each checked status as a param
+        if (startDate) {
+          params.append("startDate", startDate)
+        }
+        if (endDate) {
+          params.append("endDate", endDate)
+        }
+
         const token = localStorage.getItem("token");
         const response = await fetch(
           `http://localhost:8080/api/claims/allclaims?${params.toString()}`,
@@ -40,6 +51,7 @@ function ClaimsList() {
 
         const json = await response.json();
         setClaims(json);
+        console.log(json)
         setHasMore(json.content.length > 0);
       } catch (error) {
         console.error("Error fetching claim details data:", error);
@@ -47,7 +59,7 @@ function ClaimsList() {
     };
 
     fetchData();
-  }, [selectedStatuses, page]); 
+  }, [selectedStatuses, page, startDate, endDate]); 
 
   if (!claims) return <p>Loading claims...</p>;
 
@@ -80,6 +92,12 @@ function ClaimsList() {
         selectedStatuses={selectedStatuses}
         setSelectedStatuses={setSelectedStatuses}
       />
+      <DateFilter
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+/>
       <div>All Claims:</div>
       <div>{claimsList}</div>
 

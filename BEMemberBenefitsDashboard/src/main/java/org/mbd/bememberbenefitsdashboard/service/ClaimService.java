@@ -80,11 +80,10 @@ public class ClaimService {
             String claimNumber,
             Pageable pageable) {
 
-        // Get a page of Claims (unfiltered)
-        Page<Claim> page = claimRepository.findAll(pageable);
+        List<Claim> allClaims = claimRepository.findAll(); // no pagination yet
 
-        // Apply in-memory filters
-        List<Claim> filtered = page.getContent().stream()
+        // 1. Filter first
+        List<Claim> filtered = allClaims.stream()
                 .filter(c -> status == null || status.contains(c.getStatus()))
                 .filter(c -> startDate == null || !c.getServiceStartDate().isBefore(startDate))
                 .filter(c -> endDate == null || !c.getServiceEndDate().isAfter(endDate))
@@ -94,9 +93,17 @@ public class ClaimService {
                         c.getClaimNumber().equalsIgnoreCase(claimNumber))
                 .toList();
 
-        List<ClaimDetailDTO> dtoList = new ArrayList<>();
+        // 2. Paginate manually
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), filtered.size());
+        if (start >= filtered.size()) {
+            return new PageImpl<>(List.of(), pageable, filtered.size());
+        }
+        List<Claim> paged = filtered.subList(start, end);
 
-        for (Claim c : filtered) {
+        // 3. Convert to DTOs
+        List<ClaimDetailDTO> dtoList = new ArrayList<>();
+        for (Claim c : paged) {
             ClaimDetailDTO dto = new ClaimDetailDTO();
             dto.setId(c.getId());
             dto.setClaimNumber(c.getClaimNumber());
@@ -108,7 +115,9 @@ public class ClaimService {
             dtoList.add(dto);
         }
 
+        // 4. Return Page
         return new PageImpl<>(dtoList, pageable, filtered.size());
     }
+
 
 }

@@ -12,11 +12,14 @@ function StatusFilter({ selectedStatuses, setSelectedStatuses }: any) {
   return (
     <div
       style={{
+        display: "inline-flex",
+        flexDirection: "column",
         border: "1px solid black",
         padding: "16px",
         width: "200px",
         borderRadius: "4px",
-        marginBottom: "16px",
+        marginRight: "16px", // space between filters
+        verticalAlign: "top", // aligns nicely with date filter
       }}
     >
       <p>Status:</p>

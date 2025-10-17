@@ -32,7 +32,7 @@ public class AuthService {
                     newUser.setAuthSub(sub);
                     newUser.setAuthProvider("google");
                     newUser.setEmail(email);
-                    // member will be created below
+
                     return userRepository.save(newUser);
                 });
 
@@ -46,9 +46,9 @@ public class AuthService {
 
             // Link member to user
             user.setMember(member);
-
+            //populate dummy data
             dummyDataService.populateDummyData(member);
-            // Save user again to cascade member
+
             userRepository.save(user);
         }
 

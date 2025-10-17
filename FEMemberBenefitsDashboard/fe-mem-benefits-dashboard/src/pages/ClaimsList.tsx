@@ -5,6 +5,7 @@ import StatusFilter from "../assets/StatusFilter";
 import DateFilter from "../assets/DateFilter";
 import ProviderFilter from "../assets/ProviderFilter";
 import ClaimNumberFilter from "../assets/ClaimNumberFilter";
+import ResultsPerPageFilter from "../assets/ResultsPerPageFilter";
 
 function ClaimsList() {
   const [claims, setClaims] = useState<any>(null);
@@ -19,14 +20,14 @@ function ClaimsList() {
   const [endDate, setEndDate] = useState<string>("");
   const [provider, setProvider] = useState("");
   const [claimNumber, setClaimNumber] = useState<string>("");
-
+  const [resultSize, setResultSize] = useState<any>(10);
 
   // Fetch claims whenever selectedStatuses OR page changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Build query params
-        const params = new URLSearchParams({ page: page.toString(), size: "10" });
+        const params = new URLSearchParams({ page: page.toString()});
 
         // Add each checked status as a param
         statusNames.forEach((status, i) => {
@@ -47,6 +48,9 @@ function ClaimsList() {
         }
         if (claimNumber) {
           params.append("claimNumber", claimNumber)
+        }
+        if (resultSize) {
+          params.append("size", resultSize)
         }
 
         const token = localStorage.getItem("token");
@@ -70,7 +74,7 @@ function ClaimsList() {
     };
 
     fetchData();
-  }, [selectedStatuses, page, startDate, endDate, provider, claimNumber]); 
+  }, [selectedStatuses, page, startDate, endDate, provider, claimNumber, resultSize]); 
 
   if (!claims) return <p>Loading claims...</p>;
 
@@ -116,6 +120,10 @@ function ClaimsList() {
       <ClaimNumberFilter 
         claimNumber={claimNumber}
         setClaimNumber={setClaimNumber}
+      />
+      <ResultsPerPageFilter 
+        resultSize = {resultSize}
+        setResultSize = {setResultSize}
       />
       <div>All Claims:</div>
       <div>{claimsList}</div>

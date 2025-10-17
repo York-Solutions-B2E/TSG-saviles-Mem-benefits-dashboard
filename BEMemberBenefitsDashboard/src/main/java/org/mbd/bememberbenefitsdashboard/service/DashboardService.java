@@ -12,10 +12,8 @@ import org.mbd.bememberbenefitsdashboard.repository.EnrollmentRepository;
 import org.mbd.bememberbenefitsdashboard.repository.MemberRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class DashboardService {
@@ -30,6 +28,7 @@ public class DashboardService {
     }
 
     public EnrollmentDTO getCurrentMemberEnrollment(Jwt jwt) {
+
         String email = jwt.getClaim("email");
         return memberRepository.findByEmail(email)
                 .flatMap(member -> enrollmentRepository.findByMemberAndActiveTrue(member))

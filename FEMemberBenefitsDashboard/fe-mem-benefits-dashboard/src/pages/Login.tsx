@@ -6,54 +6,43 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const handleGoogleSuccess = async (credentialResponse: any) => {
     const token = credentialResponse.credential;
 
-    const decoded: any = jwtDecode(token);
-    if (!token) {
-      setError("No credential received from Google.");
-      return;
-    }
+    const decoded: any = jwtDecode(token); //Use "any" becuase we know the structure and can extract given_name
 
     try {
-      // Send Google ID token directly in Authorization header
-      const res = await fetch("http://localhost:8080/api/auth/me", {
+      const res = await fetch("http://localhost:8080/api/auth/me", { //using fetch and setting response to res
         method: "GET",
         headers: { "Authorization": `Bearer ${token}` },
       });
 
-      if (!res.ok) {
+      if (!res.ok) { //Response was sucessful but maybe token wasn't accepted
         const text = await res.text();
         console.error("Backend login failed:", text);
         setError("Backend login failed");
         return;
       }
 
-      // Login succeeded — store token locally for future API calls
       localStorage.setItem("token", token);
       localStorage.setItem("userName", decoded.given_name)
-
-      // Redirect to dashboard
       navigate("/dashboard");
-    } catch (err) {
+
+    } catch (err) { //network level erorr (something like no backend was running)
       console.error("Error logging in:", err);
       setError("An error occurred during login.");
     }
   };
 
-  const handleGoogleFailure = () => {
-    console.error("Google login failed");
-    setError("Google login failed.");
-  };
 
   return (
     <>
-      <h1>Login:</h1>
+      <h2>Login:</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div style={{ marginTop: "20px" }}>
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
-          onError={handleGoogleFailure}
         />
       </div>
     </>

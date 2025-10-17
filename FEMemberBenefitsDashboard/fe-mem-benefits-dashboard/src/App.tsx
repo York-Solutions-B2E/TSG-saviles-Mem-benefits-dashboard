@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation} from "react-router-dom";
 import './App.css';
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -7,12 +7,12 @@ import PublicRoute from "./assets/PublicRoute";
 import Welcome from "./pages/Welcome";
 import ClaimDetail from "./pages/ClaimDetail";
 import ClaimsList from "./pages/ClaimsList";
+import Learning from "./pages/Learning";
 
 function AppContent() {
+  
   const location = useLocation();
-  const isLoggedIn = !!localStorage.getItem("token"); 
-
-  const showNav = !isLoggedIn && (location.pathname === "/" || location.pathname === "/login");
+  const showNav = location.pathname === "/" || location.pathname === "/login";
 
   return (
     <>
@@ -22,10 +22,11 @@ function AppContent() {
         </nav>
       )}
 
-      <Routes>
+      <Routes> {/* "when we're at this URL, rendor this component" */}
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Welcome />} />
+          <Route path="/learning" element={<Learning />} /> {/* REMOVE THIS AND DELETE LEARNING FILE */}
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -40,7 +41,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> {/* "everything inside here can use Routes/Links" keeps track of URL changes*/}
       <AppContent />
     </BrowserRouter>
   );

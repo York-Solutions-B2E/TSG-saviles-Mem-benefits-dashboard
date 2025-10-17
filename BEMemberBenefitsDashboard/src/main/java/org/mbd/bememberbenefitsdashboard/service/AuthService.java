@@ -17,18 +17,15 @@ public class AuthService {
         this.dummyDataService = dummyDataService;
     }
 
-
-    // Accept Jwt as single parameter
     public void findOrCreateMember(Jwt jwt) {
         String sub = jwt.getSubject();
         String email = jwt.getClaim("email");
         String firstName = jwt.getClaim("given_name");
         String lastName = jwt.getClaim("family_name");
 
-        // Find existing user or create a new one
         User user = userRepository.findByAuthSub(sub)
-                .orElseGet(() -> {
-                    User newUser = new User();
+                .orElseGet(() -> { //If no user found, create new user
+                    User newUser = new User(); //Also creating anon function that creates/saves new user w/ lambda
                     newUser.setAuthSub(sub);
                     newUser.setAuthProvider("google");
                     newUser.setEmail(email);
@@ -36,7 +33,7 @@ public class AuthService {
                     return userRepository.save(newUser);
                 });
 
-        // Create member if it doesn't exist
+        // Create member if they don't exist
         if (user.getMember() == null) {
             Member member = new Member();
             member.setUser(user);
@@ -44,7 +41,6 @@ public class AuthService {
             member.setFirstName(firstName);
             member.setLastName(lastName);
 
-            // Link member to user
             user.setMember(member);
             //populate dummy data
             dummyDataService.populateDummyData(member);

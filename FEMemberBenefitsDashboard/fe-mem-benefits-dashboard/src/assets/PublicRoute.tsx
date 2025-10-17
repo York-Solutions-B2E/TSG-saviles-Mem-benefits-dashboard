@@ -1,16 +1,14 @@
-import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const PublicRoute: React.FC = () => {
+function PublicRoute() {
   const token = localStorage.getItem("token");
 
-  // If token exists, redirect to dashboard
   if (token) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/dashboard"/>;
   }
-
-  // Otherwise, render the public route
+  //works as a placeholder to render child route (if no token)
   return <Outlet />;
-};
+}
 
 export default PublicRoute;
+

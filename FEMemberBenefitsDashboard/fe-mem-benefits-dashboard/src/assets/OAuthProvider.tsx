@@ -1,13 +1,9 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-interface OAuthProviderProps {
-  children: React.ReactNode;
-}
-
-export default function OAuthProvider({ children }: OAuthProviderProps) {
+export default function OAuthProvider({ children }:{children: React.ReactNode}) { //React.ReactNode makes sure that "children" is something react can actually render (like plain JS)
   return (
     <GoogleOAuthProvider clientId="883984443893-2dmlii1eqk9daum3ihnm75ij9kqs80fd.apps.googleusercontent.com">
-      {children}
+      {children} {/* Entire app is children in this context */}
     </GoogleOAuthProvider>
   );
 }

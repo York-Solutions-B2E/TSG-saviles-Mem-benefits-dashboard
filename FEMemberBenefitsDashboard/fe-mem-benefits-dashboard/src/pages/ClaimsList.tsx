@@ -5,23 +5,25 @@ import StatusFilter from "../assets/StatusFilter";
 
 function ClaimsList() {
   const [claims, setClaims] = useState<any>(null);
+  const [page, setPage] = useState(0); 
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
-  // Get the statuses from statusfilter component
+  // Get the statuses from StatusFilter component
   const [selectedStatuses, setSelectedStatuses] = useState<boolean[]>([false, false, false, false, false]);
   const statusNames = ["SUBMITTED", "IN_REVIEW", "PROCESSED", "PAID", "DENIED"];
 
-  // Fetch claims whenever the selectedStatuses change
+  // Fetch claims whenever selectedStatuses OR page changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Build query params
-        const params = new URLSearchParams({ page: "0", size: "10" });
+        const params = new URLSearchParams({ page: page.toString(), size: "10" });
 
         // Add each checked status as a param
         statusNames.forEach((status, i) => {
           if (selectedStatuses[i]) {
-            params.append("status", status); 
+            params.append("status", status);
           }
         });
 
@@ -38,13 +40,14 @@ function ClaimsList() {
 
         const json = await response.json();
         setClaims(json);
+        setHasMore(json.content.length > 0);
       } catch (error) {
         console.error("Error fetching claim details data:", error);
       }
     };
 
     fetchData();
-  }, [selectedStatuses]);
+  }, [selectedStatuses, page]); 
 
   if (!claims) return <p>Loading claims...</p>;
 
@@ -79,6 +82,17 @@ function ClaimsList() {
       />
       <div>All Claims:</div>
       <div>{claimsList}</div>
+
+      <div style={{ marginTop: "16px" }}>
+        <button onClick={() => setPage((p) => Math.max(p - 1, 0))} disabled={page === 0}>
+          Previous Page
+        </button>
+        <span style={{ margin: "0 8px" }}>Page {page + 1}</span>
+        <button onClick={() => setPage((p) => p + 1)}disabled={!hasMore}>
+          Next Page
+        </button>
+      </div>
+
       <button
         style={{ marginTop: "16px", padding: "8px 12px", cursor: "pointer" }}
         onClick={() => navigate("/dashboard")}

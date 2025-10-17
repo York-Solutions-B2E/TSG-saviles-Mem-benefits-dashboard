@@ -90,6 +90,11 @@ for (let i = 0; i < claim.claimLines.length; i++) {
                 onClick={() => navigate("/dashboard")}
                 >Return to Dashboard
             </button>
+            <button 
+                style={{ marginTop: "16px", padding: "8px 12px", cursor: "pointer" }} 
+                onClick={() => navigate("/claimslist")}
+                >View all Claims
+            </button>
         </div>
         </>
     )

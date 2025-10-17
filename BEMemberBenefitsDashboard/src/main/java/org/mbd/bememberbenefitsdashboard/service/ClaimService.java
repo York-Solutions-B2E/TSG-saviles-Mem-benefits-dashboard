@@ -80,7 +80,7 @@ public class ClaimService {
             String claimNumber,
             Pageable pageable) {
 
-        List<Claim> allClaims = claimRepository.findAll(); // no pagination yet
+        List<Claim> allClaims = claimRepository.findAllByOrderByReceivedDateDesc();
 
         // 1. Filter first
         List<Claim> filtered = allClaims.stream()

@@ -4,6 +4,7 @@ import InAppHeader from "../components/InAppHeader";
 import StatusFilter from "../assets/StatusFilter";
 import DateFilter from "../assets/DateFilter";
 import ProviderFilter from "../assets/ProviderFilter";
+import ClaimNumberFilter from "../assets/ClaimNumberFilter";
 
 function ClaimsList() {
   const [claims, setClaims] = useState<any>(null);
@@ -17,6 +18,8 @@ function ClaimsList() {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [provider, setProvider] = useState("");
+  const [claimNumber, setClaimNumber] = useState<string>("");
+
 
   // Fetch claims whenever selectedStatuses OR page changes
   useEffect(() => {
@@ -42,6 +45,9 @@ function ClaimsList() {
         if (provider) {
           params.append("provider", provider)
         }
+        if (claimNumber) {
+          params.append("claimNumber", claimNumber)
+        }
 
         const token = localStorage.getItem("token");
         const response = await fetch(
@@ -64,7 +70,7 @@ function ClaimsList() {
     };
 
     fetchData();
-  }, [selectedStatuses, page, startDate, endDate, provider]); 
+  }, [selectedStatuses, page, startDate, endDate, provider, claimNumber]); 
 
   if (!claims) return <p>Loading claims...</p>;
 
@@ -106,6 +112,10 @@ function ClaimsList() {
       <ProviderFilter 
         provider={provider}
         setProvider={setProvider}
+      />
+      <ClaimNumberFilter 
+        claimNumber={claimNumber}
+        setClaimNumber={setClaimNumber}
       />
       <div>All Claims:</div>
       <div>{claimsList}</div>

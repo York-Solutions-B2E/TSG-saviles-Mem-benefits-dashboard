@@ -79,7 +79,7 @@ function ClaimsList() {
     return <p>No claim Data</p>;
   }
 
-  // Build claim cards
+  // Build claim boxes
   const claimsList = [];
   for (let i = 0; i < claims.content.length; i++) {
     const claim = claims.content[i];
@@ -105,8 +105,8 @@ function ClaimsList() {
     <>
       <InAppHeader />
       <StatusFilter
-        selectedStatuses={selectedStatuses}
-        setSelectedStatuses={setSelectedStatuses}
+        selectedStatuses={selectedStatuses} //Passing parent state down as props
+        setSelectedStatuses={setSelectedStatuses} // Passing function to update parent state
       />
       <DateFilter
         startDate={startDate}

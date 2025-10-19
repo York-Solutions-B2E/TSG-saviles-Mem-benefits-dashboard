@@ -13,11 +13,11 @@ function ClaimNumberFilter({ claimNumber, setClaimNumber }: any) {
       }}
     >
       <label>
-        Claim #:{" "}
+        Claim #:
         <input
           type="text"
-          value={claimNumber}
-          onChange={(e) => setClaimNumber(e.target.value)}
+          value={claimNumber} //Controlled input. Displays the parent state 'claimNumber'
+          onChange={(e) => setClaimNumber(e.target.value)} //Updates parent state via 'setClaimNumber' when user types
           placeholder="Claim #"
           style={{ padding: "4px", marginLeft: "8px" }}
         />

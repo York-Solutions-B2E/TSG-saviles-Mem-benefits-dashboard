@@ -14,7 +14,6 @@ function Login() {
 
     try {
       const res = await fetch("http://localhost:8080/api/auth/me", { //using fetch and setting response to res
-        method: "GET",
         headers: { "Authorization": `Bearer ${token}` },
       });
 

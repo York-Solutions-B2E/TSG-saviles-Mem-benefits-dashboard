@@ -1,13 +1,11 @@
 package org.mbd.bememberbenefitsdashboard.controller;
 
-import org.mbd.bememberbenefitsdashboard.dto.ClaimDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimDetailDTO;
 import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.service.ClaimService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;

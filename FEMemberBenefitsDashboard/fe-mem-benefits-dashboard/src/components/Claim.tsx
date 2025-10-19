@@ -10,8 +10,7 @@ function Claim() {
                 const token = localStorage.getItem("token");
                 const reponse = await fetch("http://localhost:8080/api/dashboard/claims", {
                     headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     }
                 });
                 const json = await reponse.json();
@@ -35,7 +34,7 @@ function Claim() {
         const claim = data[i]
 
         const element = (
-            <div key={i} style={{ border: "1px solid black", margin: "8px", padding: "8px" }}>
+            <div key={i} style={{ border: "1px solid grey", margin: "8px", padding: "8px" }}>
                 <p style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
                     onClick={() => navigate(`/claims/${claim.id}`)}
                 >  <strong>Claim #:</strong> {claim.claimNumber}</p>

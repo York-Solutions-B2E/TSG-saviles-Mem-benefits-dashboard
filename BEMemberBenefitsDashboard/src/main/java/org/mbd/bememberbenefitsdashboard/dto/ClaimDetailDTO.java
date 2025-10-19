@@ -1,5 +1,6 @@
 package org.mbd.bememberbenefitsdashboard.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;

@@ -1,50 +1,47 @@
 import { useEffect, useState } from "react";
 
 function Accumulator() {
-    const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await fetch("http://localhost:8080/api/dashboard/accumulator", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    }
-                });
-                const json = await response.json();
-                setData(json);
-            } catch (error) {
-                console.error("Error fetching accumulator data:", error);
-            }
-        }
-        fetchData();
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/api/dashboard/accumulator", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+                
+        const json = await response.json();
+        setData(json);
+      } catch (error) {
+        console.error("Error fetching accumulator data:", error);
+      }
+    };
+        
+    fetchData();
+  }, []);
 
-    if(!data) {
-        return <p>No Accumulator Data</p>
-    }
+  if(!data) {
+    return <p>No Accumulator Data</p>
+  }
 
-    
 
-    let accumulatorItems = [];
+  let accumulatorItems = [];
 
-  // loop through the data
   for (let i = 0; i < data.length; i++) {
     const acc = data[i];
 
     const type = acc.accumulatorType.charAt(0).toUpperCase() + acc.accumulatorType.slice(1).toLowerCase();
 
-    // create a simple element for each accumulator
+    // Creating an element to return later
     const element = (
-      <div key={i}>
+      <div key={i}> {/*Helps react keep track of which data element we are referring to*/}
         <p><strong>{type}:</strong> ${acc.usedAmount.toFixed(2)}/${acc.limitAmount.toFixed(2)}</p>
-        <hr />
       </div>
     );
 
-    // add it to the array
     accumulatorItems.push(element);
   }
 
@@ -59,8 +56,8 @@ function Accumulator() {
       }}
     >
       <h2>Accumulator:</h2>
-      <div style={{ marginBottom: "1rem" }}>
-       {accumulatorItems}<br />
+      <div>
+       {accumulatorItems}
       </div>
     </div>
     )

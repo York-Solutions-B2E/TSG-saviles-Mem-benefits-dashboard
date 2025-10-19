@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 function InAppHeader() {
   const navigate = useNavigate();
 
-  // Grab user info from localStorage (assuming you stored name after login)
-  const userName = localStorage.getItem("userName") || "User";
+  const userName = localStorage.getItem("userName");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userName"); // optional, clean up stored name
+    localStorage.removeItem("userName");
     navigate("/login");
   };
 

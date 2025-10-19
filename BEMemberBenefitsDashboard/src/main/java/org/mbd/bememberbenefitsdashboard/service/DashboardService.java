@@ -6,7 +6,6 @@ import org.mbd.bememberbenefitsdashboard.dto.EnrollmentDTO;
 import org.mbd.bememberbenefitsdashboard.entity.*;
 import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
 import org.mbd.bememberbenefitsdashboard.repository.EnrollmentRepository;
-import org.mbd.bememberbenefitsdashboard.repository.MemberRepository;
 import org.mbd.bememberbenefitsdashboard.repository.UserRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,11 @@ import java.util.List;
 @Service
 public class DashboardService {
     private final EnrollmentRepository enrollmentRepository;
-    private final MemberRepository memberRepository;
     private final ClaimRepository claimRepository;
     private final UserRepository userRepository;
 
-    public DashboardService(EnrollmentRepository enrollmentRepository, MemberRepository memberRepository, ClaimRepository claimRepository, UserRepository userRepository) {
+    public DashboardService(EnrollmentRepository enrollmentRepository, ClaimRepository claimRepository, UserRepository userRepository) {
         this.enrollmentRepository = enrollmentRepository;
-        this.memberRepository = memberRepository;
         this.claimRepository = claimRepository;
         this.userRepository = userRepository;
     }
@@ -51,6 +48,7 @@ public class DashboardService {
         List<Accumulator> accumulators = enrollment.getAccumulators();
 
         List<AccumulatorDTO> accumulatorDTOs = new ArrayList<>();
+
         for (Accumulator acc : accumulators) {
             AccumulatorDTO dto = new AccumulatorDTO();
             dto.setAccumulatorType(acc.getType());
@@ -62,12 +60,15 @@ public class DashboardService {
     }
 
     public List<ClaimDTO> getMemberClaims(Jwt jwt) {
-        String email = jwt.getClaim("email");
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        String sub = jwt.getClaim("sub");
+        User user = userRepository.getByAuthSub(sub);
+        Member member = user.getMember();
 
         List<Claim> claims = claimRepository.findTop5ByMemberOrderByReceivedDateDesc(member);
+
         List<ClaimDTO> claimDTOs = new ArrayList<>();
+
         for (Claim claim : claims) {
             ClaimDTO dto = new ClaimDTO();
             dto.setId(claim.getId());

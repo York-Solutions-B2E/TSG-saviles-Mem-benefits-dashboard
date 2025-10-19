@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 
 function ActivePlan() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any>(null); //Instead of any, could use an interface to model data.
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { // We want async. useEffect does not like. So, we create a function, and then call it below.
       try {
         const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:8080/api/dashboard/enrollment", {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          }
         });
 
         const json = await response.json();
@@ -21,10 +20,10 @@ function ActivePlan() {
       } 
     };
 
-    fetchData();
+    fetchData(); 
   }, []);
 
-  if (!data || !data.plan) {
+  if (!data) {
     return <p>No active enrollment found.</p>;
   }
 
@@ -38,16 +37,14 @@ function ActivePlan() {
       }}
     >
       <h2>Active Plan:</h2>
-      <div style={{ marginBottom: "1rem" }}>
+      <div>
         <strong>Plan Name:</strong> {data.plan.name} <br />
         <strong>Plan Type:</strong> {data.plan.type} <br />
         <strong>Network:</strong> {data.plan.networkName} <br />
-        <strong>Plan Year:</strong> {data.plan.planYear}
-      </div>
-      <div>
-        <strong>Coverage Start:</strong>{" "}
+        <strong>Plan Year:</strong> {data.plan.planYear} <br />
+        <strong>Coverage Start: </strong>
         {new Date(data.coverageStart).toLocaleDateString("en-US")} <br />
-        <strong>Coverage End:</strong>{" "}
+        <strong>Coverage End: </strong>
         {new Date(data.coverageEnd).toLocaleDateString("en-US")}
       </div>
     </div>

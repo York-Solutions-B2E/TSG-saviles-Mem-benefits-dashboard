@@ -32,7 +32,7 @@ public class ClaimController {
             @RequestParam(required = false) LocalDate endDate,
             @RequestParam(required = false) String provider,
             @RequestParam(required = false) String claimNumber,
-            Pageable pageable
+            Pageable pageable // interface from spring data
     ) {
         return claimService.getAllClaimsWithFilters(status, startDate, endDate, provider, claimNumber, pageable);
     }

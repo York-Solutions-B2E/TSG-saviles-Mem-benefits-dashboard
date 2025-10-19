@@ -22,12 +22,12 @@ function ClaimsList() {
   const [claimNumber, setClaimNumber] = useState<string>("");
   const [resultSize, setResultSize] = useState<any>(10);
 
-  // Fetch claims whenever selectedStatuses OR page changes
+  // Fetch claims whenever filters change
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Build query params
-        const params = new URLSearchParams({ page: page.toString()});
+        const params = new URLSearchParams({ page: page.toString()}); //browser API that allows you to build query string
 
         // Add each checked status as a param
         statusNames.forEach((status, i) => {
@@ -36,7 +36,7 @@ function ClaimsList() {
           }
         });
 
-        // Add each checked status as a param
+        // Add each filter as a param
         if (startDate) {
           params.append("startDate", startDate)
         }
@@ -58,8 +58,7 @@ function ClaimsList() {
           `http://localhost:8080/api/claims/allclaims?${params.toString()}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
             },
           }
         );
@@ -67,7 +66,7 @@ function ClaimsList() {
         const json = await response.json();
         setClaims(json);
         console.log(json)
-        setHasMore(json.content.length > 0);
+        setHasMore(page + 1 < json.totalPages); //true until we exceed total pages
       } catch (error) {
         console.error("Error fetching claim details data:", error);
       }
@@ -76,7 +75,9 @@ function ClaimsList() {
     fetchData();
   }, [selectedStatuses, page, startDate, endDate, provider, claimNumber, resultSize]); 
 
-  if (!claims) return <p>Loading claims...</p>;
+  if (!claims) {
+    return <p>No claim Data</p>;
+  }
 
   // Build claim cards
   const claimsList = [];
@@ -129,11 +130,11 @@ function ClaimsList() {
       <div>{claimsList}</div>
 
       <div style={{ marginTop: "16px" }}>
-        <button onClick={() => setPage((p) => Math.max(p - 1, 0))} disabled={page === 0}>
+        <button onClick={() => setPage(page - 1)} disabled={page === 0}>
           Previous Page
         </button>
-        <span style={{ margin: "0 8px" }}>Page {page + 1}</span>
-        <button onClick={() => setPage((p) => p + 1)}disabled={!hasMore}>
+        <span style={{ margin: "8px" }}>Page {page + 1}</span>
+        <button onClick={() => setPage(page + 1)}disabled={!hasMore}>
           Next Page
         </button>
       </div>

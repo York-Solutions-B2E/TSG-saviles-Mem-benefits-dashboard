@@ -25,6 +25,8 @@ function ClaimDetail() {
         fetchData();
     }, []);
 
+    console.log(claim)
+
     if(!claim) {
         return <p>No claim details Data</p>
     }
@@ -69,7 +71,23 @@ function ClaimDetail() {
         );
 
     claimLinesList.push(element);
-}
+    }
+   let claimStatusEventsList = [];
+
+   for (let i = 0; i < claim.claimStatusEvents.length; i++) {
+        const event = claim.claimStatusEvents[i];
+        const dateObj = new Date(event.occurredAt);
+        const formattedDate = dateObj.toLocaleDateString('en-US');
+        const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        const element = (
+            <div key={i} style={{ border: "1px solid gray", margin: "4px", padding: "4px" }}>
+                <p><strong>{event.status}</strong>: {formattedDate} {formattedTime}</p>
+            </div>
+        );
+
+    claimStatusEventsList.push(element);
+    }
 
 
     return (
@@ -78,6 +96,8 @@ function ClaimDetail() {
         <div>
             <h3>Claim Details:</h3>
             {claimInfo}
+            <h3>Status History:</h3>
+            {claimStatusEventsList}
             <h3>Financial Summary:</h3>
             {financialSummary}
             <h3>Claim Lines:</h3>

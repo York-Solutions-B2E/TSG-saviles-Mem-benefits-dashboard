@@ -2,10 +2,8 @@ package org.mbd.bememberbenefitsdashboard.service;
 
 import org.mbd.bememberbenefitsdashboard.dto.ClaimDetailDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimLineDTO;
-import org.mbd.bememberbenefitsdashboard.entity.Claim;
-import org.mbd.bememberbenefitsdashboard.entity.ClaimLine;
-import org.mbd.bememberbenefitsdashboard.entity.Member;
-import org.mbd.bememberbenefitsdashboard.entity.User;
+import org.mbd.bememberbenefitsdashboard.dto.ClaimStatusEventDTO;
+import org.mbd.bememberbenefitsdashboard.entity.*;
 import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
 import org.mbd.bememberbenefitsdashboard.repository.UserRepository;
@@ -13,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,30 +45,12 @@ public class ClaimService {
         dto.setProviderName(claim.getProvider().getName());
 
         List<ClaimLineDTO> lineDTOs = getClaimLineDTOS(claim); //Helper function
-
         dto.setClaimLines(lineDTOs);
 
+        List<ClaimStatusEventDTO> statusEventDTOs = getClaimStatusDTOs(claim); //Another helper function
+        dto.setClaimStatusEvents(statusEventDTOs);
 
         return dto;
-    }
-
-    //Own function for claim line DTO
-    private static List<ClaimLineDTO> getClaimLineDTOS(Claim claim) {
-        List<ClaimLineDTO> lineDTOs = new ArrayList<>();
-        for (ClaimLine line : claim.getLines()) {
-            ClaimLineDTO lineDTO = new ClaimLineDTO();
-            lineDTO.setCptCode(line.getCptCode());
-            lineDTO.setDescription(line.getDescription());
-            lineDTO.setBilledAmount(line.getBilledAmount());
-            lineDTO.setAllowedAmount(line.getAllowedAmount());
-            lineDTO.setDeductibleApplied(line.getDeductibleApplied());
-            lineDTO.setCopayApplied(line.getCopayApplied());
-            lineDTO.setCoinsuranceApplied(line.getCoinsuranceApplied());
-            lineDTO.setMemberResponsibility(line.getMemberResponsibility());
-            lineDTO.setPlanPaid(line.getPlanPaid());
-            lineDTOs.add(lineDTO);
-        }
-        return lineDTOs;
     }
 
     public Page<ClaimDetailDTO> getAllClaimsWithFilters(
@@ -122,6 +103,37 @@ public class ClaimService {
 
         // Return Page
         return new PageImpl<>(dtoList, pageable, filtered.size()); //Allows us to build page with those parameters
+    }
+
+    //Own function for claim line DTO
+    private static List<ClaimLineDTO> getClaimLineDTOS(Claim claim) {
+        List<ClaimLineDTO> lineDTOs = new ArrayList<>();
+        for (ClaimLine line : claim.getLines()) {
+            ClaimLineDTO lineDTO = new ClaimLineDTO();
+            lineDTO.setCptCode(line.getCptCode());
+            lineDTO.setDescription(line.getDescription());
+            lineDTO.setBilledAmount(line.getBilledAmount());
+            lineDTO.setAllowedAmount(line.getAllowedAmount());
+            lineDTO.setDeductibleApplied(line.getDeductibleApplied());
+            lineDTO.setCopayApplied(line.getCopayApplied());
+            lineDTO.setCoinsuranceApplied(line.getCoinsuranceApplied());
+            lineDTO.setMemberResponsibility(line.getMemberResponsibility());
+            lineDTO.setPlanPaid(line.getPlanPaid());
+            lineDTOs.add(lineDTO);
+        }
+        return lineDTOs;
+    }
+
+    //Own function for Claim staus events
+    private static List<ClaimStatusEventDTO> getClaimStatusDTOs(Claim claim) {
+        List<ClaimStatusEventDTO> statusDTOs = new ArrayList<>();
+        for (ClaimStatusEvent event : claim.getStatusHistory()) {
+            ClaimStatusEventDTO dto = new ClaimStatusEventDTO();
+            dto.setStatus(event.getStatus());
+            dto.setOccurredAt(event.getOccurredAt());
+            statusDTOs.add(dto);
+        }
+        return statusDTOs;
     }
 
 

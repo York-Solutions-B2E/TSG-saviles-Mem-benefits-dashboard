@@ -7,11 +7,13 @@ import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.enums.NetworkTier;
 import org.mbd.bememberbenefitsdashboard.enums.PlanType;
 import org.mbd.bememberbenefitsdashboard.repository.*;
+import org.mbd.bememberbenefitsdashboard.repository.ClaimStatusEventRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 
 @Service
@@ -23,6 +25,7 @@ public class DummyDataService {
     private final ProviderRepository providerRepository;
     private final ClaimRepository claimRepository;
     private final ClaimLineRepository claimLineRepository;
+    private final ClaimStatusEventRepository claimStatusEventRepository;
 
 
     @Transactional
@@ -509,6 +512,84 @@ public class DummyDataService {
                 line15a,
                 line16a
         ));
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        for (Claim claim : claimRepository.findAll()) {
+            // SUBMITTED is always first
+            ClaimStatusEvent submittedEvent = new ClaimStatusEvent();
+            submittedEvent.setClaim(claim);
+            submittedEvent.setStatus(ClaimStatus.SUBMITTED);
+            submittedEvent.setOccurredAt(now.minusDays(10));
+            submittedEvent.setNote("Claim submitted");
+            claimStatusEventRepository.save(submittedEvent);
+
+            switch (claim.getStatus()) {
+                case IN_REVIEW -> {
+                    ClaimStatusEvent inReviewEvent = new ClaimStatusEvent();
+                    inReviewEvent.setClaim(claim);
+                    inReviewEvent.setStatus(ClaimStatus.IN_REVIEW);
+                    inReviewEvent.setOccurredAt(now.minusDays(5));
+                    inReviewEvent.setNote("Claim under review");
+                    claimStatusEventRepository.save(inReviewEvent);
+                }
+
+                case PROCESSED -> {
+                    ClaimStatusEvent inReviewEvent = new ClaimStatusEvent();
+                    inReviewEvent.setClaim(claim);
+                    inReviewEvent.setStatus(ClaimStatus.IN_REVIEW);
+                    inReviewEvent.setOccurredAt(now.minusDays(5));
+                    inReviewEvent.setNote("Claim under review");
+                    claimStatusEventRepository.save(inReviewEvent);
+
+                    ClaimStatusEvent processedEvent = new ClaimStatusEvent();
+                    processedEvent.setClaim(claim);
+                    processedEvent.setStatus(ClaimStatus.PROCESSED);
+                    processedEvent.setOccurredAt(now.minusDays(2));
+                    processedEvent.setNote("Claim processed");
+                    claimStatusEventRepository.save(processedEvent);
+                }
+
+                case PAID -> {
+                    ClaimStatusEvent inReviewEvent = new ClaimStatusEvent();
+                    inReviewEvent.setClaim(claim);
+                    inReviewEvent.setStatus(ClaimStatus.IN_REVIEW);
+                    inReviewEvent.setOccurredAt(now.minusDays(5));
+                    inReviewEvent.setNote("Claim under review");
+                    claimStatusEventRepository.save(inReviewEvent);
+
+                    ClaimStatusEvent processedEvent = new ClaimStatusEvent();
+                    processedEvent.setClaim(claim);
+                    processedEvent.setStatus(ClaimStatus.PROCESSED);
+                    processedEvent.setOccurredAt(now.minusDays(2));
+                    processedEvent.setNote("Claim processed");
+                    claimStatusEventRepository.save(processedEvent);
+
+                    ClaimStatusEvent paidEvent = new ClaimStatusEvent();
+                    paidEvent.setClaim(claim);
+                    paidEvent.setStatus(ClaimStatus.PAID);
+                    paidEvent.setOccurredAt(now);
+                    paidEvent.setNote("Claim paid");
+                    claimStatusEventRepository.save(paidEvent);
+                }
+
+                case DENIED -> {
+                    ClaimStatusEvent inReviewEvent = new ClaimStatusEvent();
+                    inReviewEvent.setClaim(claim);
+                    inReviewEvent.setStatus(ClaimStatus.IN_REVIEW);
+                    inReviewEvent.setOccurredAt(now.minusDays(5));
+                    inReviewEvent.setNote("Claim under review");
+                    claimStatusEventRepository.save(inReviewEvent);
+
+                    ClaimStatusEvent deniedEvent = new ClaimStatusEvent();
+                    deniedEvent.setClaim(claim);
+                    deniedEvent.setStatus(ClaimStatus.DENIED);
+                    deniedEvent.setOccurredAt(now.minusDays(1));
+                    deniedEvent.setNote("Claim denied");
+                    claimStatusEventRepository.save(deniedEvent);
+                }
+            }
+        }
 
     }
 }

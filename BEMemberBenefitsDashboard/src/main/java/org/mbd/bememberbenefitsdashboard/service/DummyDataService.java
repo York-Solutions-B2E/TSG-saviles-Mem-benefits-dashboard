@@ -23,7 +23,6 @@ public class DummyDataService {
     private final ProviderRepository providerRepository;
     private final ClaimRepository claimRepository;
     private final ClaimLineRepository claimLineRepository;
-    private final MemberRepository memberRepository;
 
 
     @Transactional
@@ -32,7 +31,7 @@ public class DummyDataService {
         boolean hasEnrollment = enrollmentRepository.findByMemberAndActiveTrue(member).isPresent();
         if (hasEnrollment) return;
 
-        // 1. Create Plans (if not exists)
+        //  Create Plans
         Plan goldPlan = new Plan(null, "Gold PPO", PlanType.PPO, "Prime Network", 2025);
         Plan silverPlan = new Plan(null, "Silver HMO", PlanType.HMO, "CarePlus Network", 2025);
         Plan bronzePlan = new Plan(null, "Bronze EPO", PlanType.EPO, "HealthFirst Network", 2025);
@@ -40,7 +39,7 @@ public class DummyDataService {
         planRepository.save(silverPlan);
         planRepository.save(bronzePlan);
 
-        // 2. Create Enrollment for the member with Gold PPO plan
+        // Create Enrollment for the member
         Enrollment enrollment = new Enrollment();
         enrollment.setMember(member);
         enrollment.setPlan(goldPlan);
@@ -50,7 +49,7 @@ public class DummyDataService {
 
         enrollmentRepository.save(enrollment);
 
-        // 3. Create Accumulators linked to the enrollment
+        // Create Accumulators linked to the enrollment
         Accumulator deductible = new Accumulator();
         deductible.setEnrollment(enrollment);
         deductible.setType(AccumulatorType.DEDUCTIBLE);
@@ -67,7 +66,7 @@ public class DummyDataService {
 
         accumulatorRepository.saveAll(Arrays.asList(deductible, oopMax));
 
-// ✅ 4a. Create or get multiple Providers
+        // Create Providers and addresses
         Address addr1 = new Address();
         addr1.setLine1("123 Main St");
         addr1.setCity("Springfield");
@@ -116,11 +115,10 @@ public class DummyDataService {
         provider4.setAddress(addr4);
         provider4.setPhone("555-444-5555");
 
-// Save all providers
         providerRepository.saveAll(Arrays.asList(provider1, provider2, provider3, provider4));
 
 
-// Create Claim 1
+        // Create Claims
         Claim claim1 = new Claim();
         claim1.setClaimNumber("CLM-1001");
         claim1.setMember(member);
@@ -134,7 +132,6 @@ public class DummyDataService {
         claim1.setTotalPlanPaid(BigDecimal.valueOf(400.00));
         claim1.setTotalMemberResponsibility(BigDecimal.valueOf(50.00));
 
-// Create Claim 2
         Claim claim2 = new Claim();
         claim2.setClaimNumber("CLM-1002");
         claim2.setMember(member);
@@ -148,7 +145,6 @@ public class DummyDataService {
         claim2.setTotalPlanPaid(BigDecimal.valueOf(700.00));
         claim2.setTotalMemberResponsibility(BigDecimal.valueOf(250.00));
 
-// Create Claim 3
         Claim claim3 = new Claim();
         claim3.setClaimNumber("CLM-1003");
         claim3.setMember(member);
@@ -162,7 +158,6 @@ public class DummyDataService {
         claim3.setTotalPlanPaid(BigDecimal.valueOf(250.00));
         claim3.setTotalMemberResponsibility(BigDecimal.valueOf(25.00));
 
-// Create Claim 4
         Claim claim4 = new Claim();
         claim4.setClaimNumber("CLM-1004");
         claim4.setMember(member);
@@ -176,7 +171,6 @@ public class DummyDataService {
         claim4.setTotalPlanPaid(BigDecimal.valueOf(0.00));
         claim4.setTotalMemberResponsibility(BigDecimal.valueOf(800.00));
 
-// Create Claim 5
         Claim claim5 = new Claim();
         claim5.setClaimNumber("CLM-1005");
         claim5.setMember(member);
@@ -190,7 +184,6 @@ public class DummyDataService {
         claim5.setTotalPlanPaid(BigDecimal.valueOf(180.00));
         claim5.setTotalMemberResponsibility(BigDecimal.valueOf(20.00));
 
-// Create Claim 6
         Claim claim6 = new Claim();
         claim6.setClaimNumber("CLM-1006");
         claim6.setMember(member);
@@ -204,7 +197,6 @@ public class DummyDataService {
         claim6.setTotalPlanPaid(BigDecimal.valueOf(0.00));
         claim6.setTotalMemberResponsibility(BigDecimal.valueOf(550.00));
 
-// Create Claim 7
         Claim claim7 = new Claim();
         claim7.setClaimNumber("CLM-1007");
         claim7.setMember(member);
@@ -218,7 +210,6 @@ public class DummyDataService {
         claim7.setTotalPlanPaid(BigDecimal.valueOf(800.00));
         claim7.setTotalMemberResponsibility(BigDecimal.valueOf(50.00));
 
-// Create Claim 8
         Claim claim8 = new Claim();
         claim8.setClaimNumber("CLM-1008");
         claim8.setMember(member);
@@ -232,7 +223,6 @@ public class DummyDataService {
         claim8.setTotalPlanPaid(BigDecimal.valueOf(950.00));
         claim8.setTotalMemberResponsibility(BigDecimal.valueOf(250.00));
 
-        // Create Claim 9
         Claim claim9 = new Claim();
         claim9.setClaimNumber("CLM-1009");
         claim9.setMember(member);
@@ -246,7 +236,6 @@ public class DummyDataService {
         claim9.setTotalPlanPaid(BigDecimal.valueOf(1500.00));
         claim9.setTotalMemberResponsibility(BigDecimal.valueOf(300.00));
 
-// Create Claim 10
         Claim claim10 = new Claim();
         claim10.setClaimNumber("CLM-1010");
         claim10.setMember(member);
@@ -260,7 +249,6 @@ public class DummyDataService {
         claim10.setTotalPlanPaid(BigDecimal.valueOf(0.00));
         claim10.setTotalMemberResponsibility(BigDecimal.valueOf(600.00));
 
-// Create Claim 11
         Claim claim11 = new Claim();
         claim11.setClaimNumber("CLM-1011");
         claim11.setMember(member);
@@ -274,7 +262,6 @@ public class DummyDataService {
         claim11.setTotalPlanPaid(BigDecimal.valueOf(250.00));
         claim11.setTotalMemberResponsibility(BigDecimal.valueOf(50.00));
 
-// Create Claim 12
         Claim claim12 = new Claim();
         claim12.setClaimNumber("CLM-1012");
         claim12.setMember(member);
@@ -288,7 +275,6 @@ public class DummyDataService {
         claim12.setTotalPlanPaid(BigDecimal.valueOf(3700.00));
         claim12.setTotalMemberResponsibility(BigDecimal.valueOf(500.00));
 
-// Create Claim 13
         Claim claim13 = new Claim();
         claim13.setClaimNumber("CLM-1013");
         claim13.setMember(member);
@@ -302,7 +288,6 @@ public class DummyDataService {
         claim13.setTotalPlanPaid(BigDecimal.valueOf(700.00));
         claim13.setTotalMemberResponsibility(BigDecimal.valueOf(300.00));
 
-// Create Claim 14
         Claim claim14 = new Claim();
         claim14.setClaimNumber("CLM-1014");
         claim14.setMember(member);
@@ -316,7 +301,6 @@ public class DummyDataService {
         claim14.setTotalPlanPaid(BigDecimal.valueOf(800.00));
         claim14.setTotalMemberResponsibility(BigDecimal.valueOf(50.00));
 
-// Create Claim 15
         Claim claim15 = new Claim();
         claim15.setClaimNumber("CLM-1015");
         claim15.setMember(member);
@@ -330,7 +314,6 @@ public class DummyDataService {
         claim15.setTotalPlanPaid(BigDecimal.valueOf(0.00));
         claim15.setTotalMemberResponsibility(BigDecimal.valueOf(2100.00));
 
-// Create Claim 16
         Claim claim16 = new Claim();
         claim16.setClaimNumber("CLM-1016");
         claim16.setMember(member);
@@ -344,15 +327,13 @@ public class DummyDataService {
         claim16.setTotalPlanPaid(BigDecimal.valueOf(1300.00));
         claim16.setTotalMemberResponsibility(BigDecimal.valueOf(200.00));
 
-
-// Save all claims
         claimRepository.saveAll(Arrays.asList(
                 claim1, claim2, claim3, claim4, claim5, claim6, claim7, claim8,
                 claim9, claim10, claim11, claim12, claim13, claim14, claim15, claim16
         ));
 
 
-        // ✅ 5. Create ClaimLines for each claim
+        //  Create ClaimLines for each claim
         ClaimLine line1a = new ClaimLine(null, claim1, 1, "99213", "Office visit, established patient",
                 BigDecimal.valueOf(200.00), BigDecimal.valueOf(180.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),
@@ -419,63 +400,54 @@ public class DummyDataService {
                 BigDecimal.valueOf(100.00), BigDecimal.valueOf(950.00),
                 BigDecimal.valueOf(250.00));
 
-        // Claim 9
         ClaimLine line9a = new ClaimLine(null, claim9, 1, "99213", "Office visit, established patient",
                 BigDecimal.valueOf(150.00), BigDecimal.valueOf(120.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(100.00),
                 BigDecimal.valueOf(30.00));
 
-// Claim 10
         ClaimLine line10a = new ClaimLine(null, claim10, 1, "80053", "Comprehensive metabolic panel",
                 BigDecimal.valueOf(250.00), BigDecimal.valueOf(200.00),
                 BigDecimal.valueOf(30.00), BigDecimal.valueOf(20.00),
                 BigDecimal.valueOf(30.00), BigDecimal.valueOf(150.00),
                 BigDecimal.valueOf(50.00));
 
-// Claim 11
         ClaimLine line11a = new ClaimLine(null, claim11, 1, "J1100", "Injection, dexamethasone sodium phosphate",
                 BigDecimal.valueOf(75.00), BigDecimal.valueOf(60.00),
                 BigDecimal.valueOf(10.00), BigDecimal.valueOf(5.00),
                 BigDecimal.valueOf(10.00), BigDecimal.valueOf(45.00),
                 BigDecimal.valueOf(15.00));
 
-// Claim 12
         ClaimLine line12a = new ClaimLine(null, claim12, 1, "81002", "Urinalysis, non-automated",
                 BigDecimal.valueOf(40.00), BigDecimal.valueOf(35.00),
                 BigDecimal.valueOf(5.00), BigDecimal.valueOf(0.00),
                 BigDecimal.valueOf(5.00), BigDecimal.valueOf(30.00),
                 BigDecimal.valueOf(10.00));
 
-// Claim 13
         ClaimLine line13a = new ClaimLine(null, claim13, 1, "97110", "Physical therapy, therapeutic exercises",
                 BigDecimal.valueOf(200.00), BigDecimal.valueOf(160.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(130.00),
                 BigDecimal.valueOf(30.00));
 
-// Claim 14
         ClaimLine line14a = new ClaimLine(null, claim14, 1, "70450", "CT head without contrast",
                 BigDecimal.valueOf(900.00), BigDecimal.valueOf(750.00),
                 BigDecimal.valueOf(80.00), BigDecimal.valueOf(40.00),
                 BigDecimal.valueOf(80.00), BigDecimal.valueOf(600.00),
                 BigDecimal.valueOf(150.00));
 
-// Claim 15
         ClaimLine line15a = new ClaimLine(null, claim15, 1, "93000", "Electrocardiogram, routine ECG with report",
                 BigDecimal.valueOf(120.00), BigDecimal.valueOf(100.00),
                 BigDecimal.valueOf(10.00), BigDecimal.valueOf(5.00),
                 BigDecimal.valueOf(10.00), BigDecimal.valueOf(85.00),
                 BigDecimal.valueOf(15.00));
 
-// Claim 16
         ClaimLine line16a = new ClaimLine(null, claim16, 1, "90791", "Psychiatric diagnostic evaluation",
                 BigDecimal.valueOf(250.00), BigDecimal.valueOf(200.00),
                 BigDecimal.valueOf(25.00), BigDecimal.valueOf(15.00),
                 BigDecimal.valueOf(25.00), BigDecimal.valueOf(160.00),
                 BigDecimal.valueOf(40.00));
 
-// Add some extra lines for variety
         ClaimLine line3b = new ClaimLine(null, claim3, 2, "97140", "Manual therapy techniques",
                 BigDecimal.valueOf(180.00), BigDecimal.valueOf(150.00),
                 BigDecimal.valueOf(20.00), BigDecimal.valueOf(10.00),

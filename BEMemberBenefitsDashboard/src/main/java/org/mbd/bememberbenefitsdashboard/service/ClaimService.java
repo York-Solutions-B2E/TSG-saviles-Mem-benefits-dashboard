@@ -4,11 +4,13 @@ import org.mbd.bememberbenefitsdashboard.dto.ClaimDetailDTO;
 import org.mbd.bememberbenefitsdashboard.dto.ClaimLineDTO;
 import org.mbd.bememberbenefitsdashboard.entity.Claim;
 import org.mbd.bememberbenefitsdashboard.entity.ClaimLine;
+import org.mbd.bememberbenefitsdashboard.entity.Member;
+import org.mbd.bememberbenefitsdashboard.entity.User;
 import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.repository.ClaimRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.mbd.bememberbenefitsdashboard.repository.UserRepository;
+import org.springframework.data.domain.*;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,9 +21,11 @@ import java.util.UUID;
 public class ClaimService {
 
     private final ClaimRepository claimRepository;
+    private final UserRepository userRepository;
 
-    public ClaimService(ClaimRepository claimRepository) {
+    public ClaimService(ClaimRepository claimRepository, UserRepository userRepository) {
         this.claimRepository = claimRepository;
+        this.userRepository = userRepository;
     }
 
     public ClaimDetailDTO getClaimDetails(UUID claimId) {
@@ -69,6 +73,7 @@ public class ClaimService {
     }
 
     public Page<ClaimDetailDTO> getAllClaimsWithFilters(
+            Jwt jwt,
             List<ClaimStatus> status,
             LocalDate startDate,
             LocalDate endDate,
@@ -76,10 +81,14 @@ public class ClaimService {
             String claimNumber,
             Pageable pageable) {
 
-        List<Claim> allClaims = claimRepository.findAllByOrderByReceivedDateDesc();
+        String sub = jwt.getClaim("sub");
+        User user = userRepository.getByAuthSub(sub);
+        Member member = user.getMember();
 
-        // 1. Filter first
-        List<Claim> filtered = allClaims.stream()
+        List<Claim> allClaims = claimRepository.findAllByMemberOrderByReceivedDateDesc(member);
+
+        // Applying all filters
+        List<Claim> filtered = allClaims.stream() //Go through all claims and return only ones that meet the filter conditions
                 .filter(c -> status == null || status.contains(c.getStatus()))
                 .filter(c -> startDate == null || !c.getServiceStartDate().isBefore(startDate))
                 .filter(c -> endDate == null || !c.getServiceEndDate().isAfter(endDate))
@@ -89,17 +98,17 @@ public class ClaimService {
                         c.getClaimNumber().equalsIgnoreCase(claimNumber))
                 .toList();
 
-        // 2. Paginate manually
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), filtered.size());
-        if (start >= filtered.size()) {
-            return new PageImpl<>(List.of(), pageable, filtered.size());
+        // Paginate manually
+        int start = (int) pageable.getOffset(); //"How many rows do we skip at start". Depending on what page we are on. Gets index of the starting row
+        int end = Math.min(start + pageable.getPageSize(), filtered.size()); //Compare results per page with total results. Grab min.
+        if (start >= filtered.size()) { // Used when results size changes and already on next page.
+            return new PageImpl<>(List.of(), pageable, filtered.size()); //return empty page
         }
-        List<Claim> paged = filtered.subList(start, end);
+        List<Claim> pagedResults = filtered.subList(start, end); //Creates sub list for results per page
 
-        // 3. Convert to DTOs
+        // Convert the filtered and paged results into DTOs
         List<ClaimDetailDTO> dtoList = new ArrayList<>();
-        for (Claim c : paged) {
+        for (Claim c : pagedResults) {
             ClaimDetailDTO dto = new ClaimDetailDTO();
             dto.setId(c.getId());
             dto.setClaimNumber(c.getClaimNumber());
@@ -111,8 +120,8 @@ public class ClaimService {
             dtoList.add(dto);
         }
 
-        // 4. Return Page
-        return new PageImpl<>(dtoList, pageable, filtered.size());
+        // Return Page
+        return new PageImpl<>(dtoList, pageable, filtered.size()); //Allows us to build page with those parameters
     }
 
 

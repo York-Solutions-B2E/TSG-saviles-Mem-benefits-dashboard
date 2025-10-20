@@ -5,6 +5,8 @@ import org.mbd.bememberbenefitsdashboard.enums.ClaimStatus;
 import org.mbd.bememberbenefitsdashboard.service.ClaimService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,14 +29,15 @@ public class ClaimController {
 
     @GetMapping("/allclaims")
     public Page<ClaimDetailDTO> getAllClaims(
+            @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) List<ClaimStatus> status,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate,
             @RequestParam(required = false) String provider,
             @RequestParam(required = false) String claimNumber,
-            Pageable pageable // interface from spring data
+            Pageable pageable // interface from spring data. can automatically process the page & size sent by front end
     ) {
-        return claimService.getAllClaimsWithFilters(status, startDate, endDate, provider, claimNumber, pageable);
+        return claimService.getAllClaimsWithFilters(jwt, status, startDate, endDate, provider, claimNumber, pageable);
     }
 
 }

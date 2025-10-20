@@ -14,7 +14,7 @@ function ClaimsList() {
   const navigate = useNavigate();
 
   // Get filters from child components
-  const [selectedStatuses, setSelectedStatuses] = useState<boolean[]>([false, false, false, false, false]);
+  const [selectedStatuses, setSelectedStatuses] = useState<boolean[]>([false, false, false, false, false]); //Holds the status state
   const statusNames = ["SUBMITTED", "IN_REVIEW", "PROCESSED", "PAID", "DENIED"];
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");

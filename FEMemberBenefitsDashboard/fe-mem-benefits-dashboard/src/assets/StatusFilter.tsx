@@ -2,7 +2,7 @@
 //React functinal component. Tkes 2 props
 function StatusFilter({ selectedStatuses, setSelectedStatuses }: any) {
   const statusNames = ["Submitted", "In Review", "Processed", "Paid", "Denied"];
-    //When checkbox is clicked, calls this function w/ an idex of the clicked checkbox
+    //When checkbox is clicked, calls this function w/ an index of the clicked checkbox
   const handleOnChange = (index: number) => {
     const newStates = [...selectedStatuses]; //Creates copy of current checkbox states. Creates another reference to the array
     newStates[index] = !newStates[index];
@@ -18,8 +18,8 @@ function StatusFilter({ selectedStatuses, setSelectedStatuses }: any) {
         padding: "16px",
         width: "200px",
         borderRadius: "4px",
-        marginRight: "16px", // space between filters
-        verticalAlign: "top", // aligns nicely with date filter
+        marginRight: "16px", 
+        verticalAlign: "top", 
       }}
     >
       <p>Status:</p>

@@ -22,7 +22,6 @@ public class AuthService {
         String email = jwt.getClaim("email");
         String firstName = jwt.getClaim("given_name");
         String lastName = jwt.getClaim("family_name");
-
         User user = userRepository.findByAuthSub(sub)
                 .orElseGet(() -> { //If no user found, create new user
                     User newUser = new User(); //Also creating anon function that creates/saves new user w/ lambda

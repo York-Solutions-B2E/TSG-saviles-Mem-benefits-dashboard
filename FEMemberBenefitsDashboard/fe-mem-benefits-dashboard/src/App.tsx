@@ -7,7 +7,6 @@ import PublicRoute from "./assets/PublicRoute";
 import Welcome from "./pages/Welcome";
 import ClaimDetail from "./pages/ClaimDetail";
 import ClaimsList from "./pages/ClaimsList";
-import Learning from "./pages/Learning";
 
 function AppContent() {
   
@@ -26,7 +25,6 @@ function AppContent() {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Welcome />} />
-          <Route path="/learning" element={<Learning />} /> {/* REMOVE THIS AND DELETE LEARNING FILE */}
         </Route>
 
         <Route element={<ProtectedRoute />}>

@@ -18,7 +18,7 @@ public class AuthController {
     @GetMapping
     public ResponseEntity<Void> validateLogin(@AuthenticationPrincipal Jwt jwt) { //@AuthPrinc is a way for us to decode jwt to grab info
         authService.findOrCreateMember(jwt);                      //Don't really need ResponseEntity, but it's an explicit
-        return ResponseEntity.ok().build();                      // way to say "we're expecting to be return a 200 status code"
+        return ResponseEntity.ok().build();                      // way to say "we're expecting to be return a 200 status code".
     }
 
 

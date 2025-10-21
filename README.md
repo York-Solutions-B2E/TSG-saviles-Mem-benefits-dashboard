@@ -32,29 +32,27 @@ Once installed, start the PostgreSQL service:
 
 `brew services start postgresql`
 
-#### 2. Create the Database
+### 2. Login to you existing server
 
-After PostgreSQL is running, create a new database named test_database:
+`psql -U [insert computer username here]`
 
-`createdb test_database`
+#### 3. Create User Postgres and password
+We're creating a user that matches the application configurations
 
-#### 3. Set Up Username and Password
+`CREATE ROLE postgres WITH LOGIN SUPERUSER CREATEDB CREATEROLE PASSWORD 'password';`
 
-By default, PostgreSQL creates a superuser account named postgres without a password.
 
-To set a password that matches your backend configuration, open the PostgreSQL shell:
+#### 4. Create the Database
 
-`psql -U postgres`
+Create a new database named test_database:
 
-Then, inside the shell, run:
-
-`ALTER USER postgres PASSWORD 'password'`
+`CREATE DATABASE test_database;`
 
 Exit the shell:
 
 `\q`
 
-#### 4. Verify Your Setup
+#### 5. Verify Your Setup
 
 Make sure your database and credentials work by connecting to it:
 
@@ -74,7 +72,7 @@ Your PostgreSQL database is set up correctly and ready to use.
 
 #### 2. Install dependencies and run
 
-`mvn spring-boot:run`
+`./mvnw spring-boot:run`
 
 The backend will start on http://localhost:8080
 
@@ -82,25 +80,15 @@ The backend will start on http://localhost:8080
 
 #### 1. Go to project frontend directory
 
-`cd FE-MEM-BENEFITS-DASHBOARD`
+`cd fe-mem-benefits-dashboard`
 
 #### 2. Install dependencies
 
 `npm install`
 
-#### 3. Install required libraries
+#### 3. Start the development server
 
-```
-npm install react-router-dom
-npm install @react-oauth/google
-npm install jwt-decode
-npm install --save-dev @types/jwt-decode
-
-```
-
-#### 4. Start the development server
-
-`npm start `
+`npm run dev`
 
 The backend will start on http://localhost:5173
 

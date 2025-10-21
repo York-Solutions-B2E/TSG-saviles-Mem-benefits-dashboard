@@ -233,7 +233,7 @@ public class DummyDataService {
         claim9.setServiceStartDate(LocalDate.of(2025, 8, 10));
         claim9.setServiceEndDate(LocalDate.of(2025, 8, 10));
         claim9.setReceivedDate(LocalDate.of(2025, 8, 15));
-        claim9.setStatus(ClaimStatus.PAID);
+        claim9.setStatus(ClaimStatus.PROCESSED);
         claim9.setTotalBilled(BigDecimal.valueOf(2200.00));
         claim9.setTotalAllowed(BigDecimal.valueOf(1800.00));
         claim9.setTotalPlanPaid(BigDecimal.valueOf(1500.00));
@@ -259,7 +259,7 @@ public class DummyDataService {
         claim11.setServiceStartDate(LocalDate.of(2025, 9, 5));
         claim11.setServiceEndDate(LocalDate.of(2025, 9, 5));
         claim11.setReceivedDate(LocalDate.of(2025, 9, 9));
-        claim11.setStatus(ClaimStatus.PAID);
+        claim11.setStatus(ClaimStatus.SUBMITTED);
         claim11.setTotalBilled(BigDecimal.valueOf(340.00));
         claim11.setTotalAllowed(BigDecimal.valueOf(300.00));
         claim11.setTotalPlanPaid(BigDecimal.valueOf(250.00));
@@ -516,7 +516,7 @@ public class DummyDataService {
         OffsetDateTime now = OffsetDateTime.now();
 
         for (Claim claim : claimRepository.findAll()) {
-            // SUBMITTED is always first
+            // Creates submitted event for all claims
             ClaimStatusEvent submittedEvent = new ClaimStatusEvent();
             submittedEvent.setClaim(claim);
             submittedEvent.setStatus(ClaimStatus.SUBMITTED);
@@ -524,7 +524,7 @@ public class DummyDataService {
             submittedEvent.setNote("Claim submitted");
             claimStatusEventRepository.save(submittedEvent);
 
-            switch (claim.getStatus()) {
+            switch (claim.getStatus()) { //Look at statuses and builds events to be "sequential"
                 case IN_REVIEW -> {
                     ClaimStatusEvent inReviewEvent = new ClaimStatusEvent();
                     inReviewEvent.setClaim(claim);

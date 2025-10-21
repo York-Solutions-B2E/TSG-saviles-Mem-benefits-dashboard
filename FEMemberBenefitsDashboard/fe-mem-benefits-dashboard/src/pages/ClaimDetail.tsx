@@ -89,7 +89,6 @@ function ClaimDetail() {
     claimStatusEventsList.push(element);
     }
 
-
     return (
         <>
         <InAppHeader />

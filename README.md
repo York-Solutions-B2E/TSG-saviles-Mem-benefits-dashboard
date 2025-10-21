@@ -32,15 +32,14 @@ Once installed, start the PostgreSQL service:
 
 `brew services start postgresql`
 
-### 2. Login to you existing server
+#### 2. Connect to your local PostgreSQL instance
 
-`psql -U [insert computer username here]`
+`psql -U [your_mac_username]`
 
-#### 3. Create User Postgres and password
+#### 3. Create a postgres superuser
 We're creating a user that matches the application configurations
 
 `CREATE ROLE postgres WITH LOGIN SUPERUSER CREATEDB CREATEROLE PASSWORD 'password';`
-
 
 #### 4. Create the Database
 

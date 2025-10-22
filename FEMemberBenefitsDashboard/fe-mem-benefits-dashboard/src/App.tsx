@@ -29,7 +29,7 @@ function AppContent() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/claims/:claimId" element={<ClaimDetail />} />
+          <Route path="/claims/:claimId" element={<ClaimDetail />} /> {/* "when we're at /claims, allow us to use whatever is after that url (claimId)" */}
           <Route path="/claimslist" element={<ClaimsList />} />
         </Route>
       </Routes>

@@ -28,7 +28,7 @@ public class DummyDataService {
     private final ClaimStatusEventRepository claimStatusEventRepository;
 
 
-    @Transactional
+    @Transactional // all or nothing insert into DB
     public void populateDummyData(Member member) {
         // Check if member already has enrollments -> skip if yes
         boolean hasEnrollment = enrollmentRepository.findByMemberAndActiveTrue(member).isPresent();

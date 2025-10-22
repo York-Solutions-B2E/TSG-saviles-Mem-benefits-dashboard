@@ -25,7 +25,6 @@ function ClaimDetail() {
         fetchData();
     }, []);
 
-    console.log(claim)
 
     if(!claim) {
         return <p>No claim details Data</p>

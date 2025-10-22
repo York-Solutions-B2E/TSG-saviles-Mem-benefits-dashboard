@@ -65,7 +65,6 @@ function ClaimsList() {
 
         const json = await response.json();
         setClaims(json);
-        console.log(json)
         setHasMore(page + 1 < json.totalPages); //true until we exceed total pages
       } catch (error) {
         console.error("Error fetching claim details data:", error);
